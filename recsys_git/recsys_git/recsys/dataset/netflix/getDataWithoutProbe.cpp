@@ -13,6 +13,7 @@
  *
  * function:
  *   get the training set without probe ratings
+ 0oay
  */
 #include <iostream>
 #include <fstream>
