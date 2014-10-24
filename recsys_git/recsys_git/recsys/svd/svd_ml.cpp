@@ -32,15 +32,15 @@ int main(int argc, char ** argv)
 {
     time_t start,end;
 	/* 구조체만 초기화 강요해서 NULL 배정*/
-    struct tm * timeStartInfo = NULL;
-    struct tm * timeEndInfo = NULL;
+    struct tm timeStartInfo;
+    struct tm timeEndInfo;
     double duration; 
     start = time(NULL);
-	localtime_s(timeStartInfo, &start);
+	localtime_s(&timeStartInfo, &start);
 	/* safety 강요로 인한 asctime_s 사용 */
 	char buffer[32];
 	char buffer_end[32];
-	asctime_s(buffer, 32, timeStartInfo);
+	asctime_s(buffer, 32, &timeStartInfo);
 	string timeStartStr(buffer);
     float alpha1 = 0.01;  //0.0045according to the paper of "a guide to SVD for CF"
     float alpha2 = 0.01;  //0.0045according to the paper of "a guide to SVD for CF"
@@ -58,8 +58,8 @@ int main(int argc, char ** argv)
     }
     end = time(NULL);
     duration = (end-start);
-	localtime_s(timeEndInfo, &end);
-	asctime_s(buffer_end, 32, timeEndInfo);
+	localtime_s(&timeEndInfo, &end);
+	asctime_s(buffer_end, 32, &timeEndInfo);
 	string timeEndStr(buffer_end);
 	cout << "Start at " << timeStartStr << ", and end at " << timeEndStr;
     cout << "duration:"<<duration <<" s!" <<endl;

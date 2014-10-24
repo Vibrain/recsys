@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #define USER_NUM 480189 
 #define ITEM_NUM 17770
-#define DIR_PATH "./transfer_set/"
+#define DIR_PATH "./recsys/dataset/netflix/transfer_set/"
 using namespace std;
 
 map<int,short> probeMatrix[USER_NUM+1];   

@@ -32,7 +32,7 @@
 #define USER_NUM 480189 
 #define ITEM_NUM 17770
 #define K_NUM  100
-#define DIR_PATH "./transfer_set/"
+#define DIR_PATH "./recsys/dataset/netflix/transfer_set/"
 #define TRAINING_SET "./data.txt"
 using namespace std;
 void getProbeReal();

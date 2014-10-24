@@ -30,14 +30,14 @@
 int main(int argc, char ** argv)
 {
     time_t start,end;
-    struct tm* startInfo = NULL;
-    struct tm* endInfo = NULL;
+    struct tm startInfo;
+    struct tm endInfo;
     double duration;
     start = time(NULL);
-    localtime_s(startInfo, &start);
+    localtime_s(&startInfo, &start);
 	char buffer[32];
 	char buffer_end[32];
-	asctime_s(buffer, 32, startInfo);
+	asctime_s(buffer, 32, &startInfo);
 	string startStr(buffer);
     float alpha1 = 0.008;    //according suggestion of xlvector
     float alpha2 = 0.008;    //according suggestion of xlvector
@@ -51,8 +51,8 @@ int main(int argc, char ** argv)
     }
     end = time(NULL);
     duration = end-start;
-	localtime_s(endInfo, &end);
-	asctime_s(buffer_end, 32, endInfo);
+	localtime_s(&endInfo, &end);
+	asctime_s(buffer_end, 32, &endInfo);
 	string endStr(buffer_end);
 	cout << "start at" << startStr << ". And end at " << endStr << endl;
     cout << "duration:"<<duration <<" s!" <<endl;

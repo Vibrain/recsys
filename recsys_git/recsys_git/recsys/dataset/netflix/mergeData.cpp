@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string>
 #include <errno.h>
-#define DIR_PATH "./transfer_set/"
+#define DIR_PATH "./recsys/dataset/netflix/transfer_set/"
 using namespace std;
 
 
