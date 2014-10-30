@@ -60,7 +60,7 @@ namespace svd{
             }            
         }
         for(i = 1; i < USER_NUM+1; ++i) {
-            if(buNum[i]>=1)bu[i] = bu[i]/(buNum[i]+10);
+            if(buNum[i]>=1) bu[i] = bu[i]/(buNum[i]+10);
             else bu[i] = 0.0;
         }
     }
@@ -85,6 +85,7 @@ namespace svd{
     void model(int dim, float  alpha1, float alpha2, float beta1, float beta2,
                int maxStep=60,double slowRate=1,bool isUpdateBias=true)
     {
+		ofstream outs("svdplus_result_.txt");
         cout << "begin initialization: " << endl;
         loadRating(TRAINING_SET,rateMatrix,RATE_SP);  //load training set
         loadProbe(PROBE_SET,probeRow,RATE_SP);   //load test set
@@ -103,7 +104,8 @@ namespace svd{
                                           //if the rmse of test begin to increase, then break
         double nowRmse = 0.0;
         cout <<"begin testRMSEProbe(): " << endl;
-        RMSEProbe(probeRow,K_NUM);
+        double tested_rmse = RMSEProbe(probeRow,K_NUM);
+		outs << tested_rmse << " " << "step" << "," << "nowRmse" << "," << "preRmse" << "," << "n" << endl;
         //main loop
         for(int step = 0; step < maxStep; ++step){  //only iterate maxStep times
             long double rmse = 0.0;
@@ -170,12 +172,15 @@ namespace svd{
             else
                 preRmse = nowRmse;
             cout << step << "\t" << nowRmse <<'\t'<< preRmse<<"     n:"<<n<<endl;
-            RMSEProbe(probeRow,K_NUM);;  // check test set rmse
+            tested_rmse = RMSEProbe(probeRow,K_NUM);  // check test set rmse
+			outs << tested_rmse << " " << step << "," << nowRmse << "," << preRmse << "," << n << endl;
             
             alpha1 *= slowRate;    //gradually reduce the learning rate(逐步减小学习速率)
             alpha2 *= slowRate;
         }
-        RMSEProbe(probeRow,K_NUM);  // check rmse of test set 
+        tested_rmse = RMSEProbe(probeRow,K_NUM);  // check rmse of test set 
+		outs << tested_rmse << endl;
+		outs.close();
         return;
     }
 };

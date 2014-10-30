@@ -22,8 +22,8 @@
 #define USER_NUM 480189  //10K:943 1M:6040
 #define ITEM_NUM 17770 //10K:1682 1M:3900
 #define K_NUM  50
-#define TRAINING_SET "../dataset/netflix/data_without_prob.txt"
-#define PROBE_SET "../dataset/netflix/probe_real.txt"
+#define TRAINING_SET "./data_without_prob.txt"
+#define PROBE_SET "./probe_real.txt"
 #define RATE_SP ","  //rate Separator
 #include "./svdBase.cpp"
 
@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
         //    cout << beta << endl;
         svd::model(K_NUM,alpha1,alpha2,beta1,beta2,60,0.9);
     }
-    end = time(NULL);
+    end = time(NULL); 
     duration = end-start;
 	localtime_s(&endInfo, &end);
 	asctime_s(buffer_end, 32, &endInfo);
@@ -57,4 +57,5 @@ int main(int argc, char ** argv)
 	cout << "start at" << startStr << ". And end at " << endStr << endl;
     cout << "duration:"<<duration <<" s!" <<endl;
     return 0;
+	//  TODO OUTPUT DATA를 출력해서 저장할것
 }

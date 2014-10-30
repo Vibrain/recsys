@@ -15,17 +15,19 @@
  */
 #ifndef SVD_SVDBASE_CPP_
 #define SVD_SVDBASE_CPP_
+
 namespace svd{
-      //use some global variables，store the parameter bu, bi, p, q
+	
+   //use some global variables，store the parameter bu, bi, p, q
     double bu[USER_NUM+1] = {0};       // the user bias in the baseline predictor
     double bi[ITEM_NUM+1] = {0};       // the item bias in the baseline predictor
     
-    int buNum[USER_NUM+1] = {0};       //ratings num of every user 用户u打分的item总数， 
-    int biNum[ITEM_NUM+1] = {0};       //rating num of every item  打过item i分的用户总数 
+    int buNum[USER_NUM+1] = {0};       //ratings num of every user
+    int biNum[ITEM_NUM+1] = {0};       //rating num of every item  
     
-    double p[USER_NUM+1][K_NUM+1] = {0};   //user character Matrix 用于存储用户的属性描述p   
-    double q[ITEM_NUM+1][K_NUM+1] = {0};   //item character Matrix 用于item的属性描述q       
-    float mean = 0;                        //mean of all ratings   全局的平均值             
+    double p[USER_NUM+1][K_NUM+1] = {0};   //user character Matrix    
+    double q[ITEM_NUM+1][K_NUM+1] = {0};   //item character Matrix       
+    float mean = 0;                        //mean of all ratings                
     
     vector < vector<rateNode> > rateMatrix(USER_NUM+1);   //store training set
     vector<testSetNode> probeRow;                            //store test set
@@ -88,6 +90,8 @@ namespace svd{
         int i,u,j,k;
         
         srand((unsigned)time(0)); 
+		//扁废侩
+		ofstream outs("svd_result_.txt");
         //initialBais(); //initialize bu and bi
         
         initialPQ(ITEM_NUM, USER_NUM,K_NUM); //intialize the matrix of user character(P) and the matrix of item character(Q) 
@@ -99,7 +103,8 @@ namespace svd{
                                           //if the rmse of test begin to increase, then break
         double nowRmse = 0.0;
         cout <<"begin testRMSEProbe(): " << endl;
-        RMSEProbe(probeRow,K_NUM);
+        double tested_rmse = RMSEProbe(probeRow,K_NUM);
+		outs << tested_rmse << " " << "step"<< "," << "nowRmse" << "," << "preRmse"<< "," << "n"<< endl;
         //main loop
         for(int step = 0; step < maxStep; ++step){  //only iterate maxStep times
             long double rmse = 0.0;
@@ -124,7 +129,7 @@ namespace svd{
                         exit(1);
                     }
                     rmse += eui * eui; ++n;
-                    if(n % 10000000 == 0)cout<<"step:"<<step<<"    n:"<<n<<" dealed!"<<endl;
+                    if(n % 10000000 == 0) cout<<"step:"<<step<<"    n:"<<n<<" dealed!"<<endl;
                     
                     if(isUpdateBias) {
                         bu[u] += alpha1 * (eui - beta1 * bu[u]);
@@ -144,12 +149,16 @@ namespace svd{
             else
                 preRmse = nowRmse;
             cout << step << "\t" << nowRmse <<'\t'<< preRmse<<"     n:"<<n<<endl;
-            RMSEProbe(probeRow,K_NUM);  // check rmse of test set 
+			
+			tested_rmse = RMSEProbe(probeRow,K_NUM);  // check rmse of test set 
+			outs << tested_rmse << " " << step << "," << nowRmse << "," << preRmse << "," << n << endl;
             
             alpha1 *= slowRate;    //gradually reduce the learning rate(逐步减小学习速率)
             alpha2 *= slowRate;
         }
-        RMSEProbe(probeRow,K_NUM);  //  check rmse of test set 
+        tested_rmse = RMSEProbe(probeRow,K_NUM);  //  check rmse of test set 
+		outs << tested_rmse << endl;
+		outs.close();
         return;
     }
 };

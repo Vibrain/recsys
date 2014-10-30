@@ -117,6 +117,7 @@ double RMSEProbe(vector<testSetNode>& probeSet,int dim)
     }
     rmse = sqrt( rmse / probeSize);
     cout<<"RMSE:"<<rmse<<" probeNum:"<<probeSize<<endl;
+	
     return rmse;
 }
 
